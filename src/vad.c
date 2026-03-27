@@ -4,6 +4,7 @@
 
 #include "pav_analysis.h"
 #include "vad.h"
+#include "pav_analysis.h"
 
 const float FRAME_TIME = 10.0F; /* in ms. */
 
@@ -92,7 +93,7 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x, float alpha0) {
   switch (vad_data->state) {
   case ST_INIT:
     vad_data->state = ST_SILENCE;
-    vad_data-> llindar_0 = f.p+alpha0;
+    vad_data->llindar_0 = f.p+alpha0;
     break;
 
   case ST_SILENCE:
