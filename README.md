@@ -194,7 +194,7 @@ Ejercicios
 - Inserte una gráfica en la que se vea con claridad la señal temporal, el etiquetado manual y la detección
   automática conseguida para el fichero grabado al efecto. 
 
-  [Imatge de Comparació](img/14.4_15_2000.png)
+  ![Imatge de Comparació](img/14.4_15_2000.png)
 
 - Explique, si existen. las discrepancias entre el etiquetado manual y la detección automática.
 
@@ -230,11 +230,12 @@ Ejercicios
 
   Tras aplicar estas mejoras y usar el umbral optimizado de 14.4, los resultados obtenidos con el script de evaluación son:
 
+```c
     **************** Summary ****************
     Recall V: 97.43%    Precision V: 87.97%    F-score V (2)  : 95.38%
     Recall S: 79.08%    Precision S: 95.14%    F-score S (1/2): 91.43%
     ===> TOTAL: 93.379%
-
+´´´
 
 
 ### Trabajos de ampliación
@@ -249,7 +250,8 @@ Ejercicios
 
 - Si ha usado `docopt_c` para realizar la gestión de las opciones y argumentos del programa `vad`, inserte
   una captura de pantalla en la que se vea el mensaje de ayuda del programa.
-  ![alt text](image.png)
+  
+  ![Missatge ajuda](img/docopt_cap.png)
 
 
 ### Contribuciones adicionales y/o comentarios acerca de la práctica
