@@ -15,8 +15,13 @@ typedef struct {
   VAD_STATE state;
   float sampling_rate;
   unsigned int frame_length;
-  float last_feature; /* for debuggin purposes */
+  float last_feature;
   float llindar_0;
+  float umbral_zcr;
+  int counter;
+  int hysteresis;
+  float min_speech_ms;
+  float min_silence_ms;
 } VAD_DATA;
 
 /* Call this function before using VAD: 
@@ -38,7 +43,7 @@ unsigned int vad_frame_size(VAD_DATA *);
 
     x: input frame
        It is assumed the length is frame_length */
-VAD_STATE vad(VAD_DATA *vad_data, float *x, float alpha0);
+VAD_STATE vad(VAD_DATA *vad_data, float *x);
 
 /* Free memory
    Returns the state of the last (undecided) states. */

@@ -33,6 +33,10 @@ int main(int argc, char *argv[]) {
   output_vad = args.output_vad;
   output_wav = args.output_wav;
   float alpha0 = atof(args.alpha0);
+  float zcr = atof(args.zcr);
+  int hysteresis = atoi(args.hysteresis);
+  float min_speech = atof(args.min_speech);
+  float min_silence = atof(args.min_silence);
 
   if (input_wav == 0 || output_vad == 0) {
     fprintf(stderr, "%s\n", args.usage_pattern);
@@ -65,6 +69,11 @@ int main(int argc, char *argv[]) {
   }
 
   vad_data = vad_open(sf_info.samplerate);
+  vad_data->llindar_0 = alpha0;
+  vad_data->umbral_zcr = zcr;
+  vad_data->hysteresis = hysteresis;
+  vad_data->min_speech_ms = min_speech;
+  vad_data->min_silence_ms = min_silence;
   /* Allocate memory for buffers */
   frame_size   = vad_frame_size(vad_data);
   buffer       = (float *) malloc(frame_size * sizeof(float));
@@ -78,24 +87,26 @@ int main(int argc, char *argv[]) {
     /* End loop when file has finished (or there is an error) */
     if  ((n_read = sf_read_float(sndfile_in, buffer, frame_size)) != frame_size) break;
 
-    if (sndfile_out != 0) {
-      /* TODO: copy all the samples into sndfile_out */
-    }
-
-    state = vad(vad_data, buffer, alpha0);
+    state = vad(vad_data, buffer);
     if (verbose & DEBUG_VAD) vad_show_state(vad_data, stdout);
 
-    /* TODO: print only SILENCE and VOICE labels */
-    /* As it is, it prints UNDEF segments but is should be merge to the proper value */
+    if (sndfile_out != 0) {
+      /*
+      if (state == ST_SILENCE) {
+        
+        sf_write_float(sndfile_out, buffer_zeros, n_read);
+      } else {
+        // Si es VOZ (o cualquier otro estado de voz), escribimos el audio original 
+
+        sf_write_float(sndfile_out, buffer, n_read);
+      }*/
+    }
+
     if (state != last_state) {
       if (t != last_t)
         fprintf(vadfile, "%.5f\t%.5f\t%s\n", last_t * frame_duration, t * frame_duration, state2str(last_state));
       last_state = state;
       last_t = t;
-    }
-
-    if (sndfile_out != 0) {
-      /* TODO: go back and write zeros in silence segments */
     }
   }
 
