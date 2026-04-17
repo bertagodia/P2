@@ -194,6 +194,8 @@ Ejercicios
 - Inserte una gráfica en la que se vea con claridad la señal temporal, el etiquetado manual y la detección
   automática conseguida para el fichero grabado al efecto. 
 
+  Lo hemos hecho con un umbral de alpha de 14.4, ciclo de histéresi n=15 y tasa de cruces por zero de z=2000
+
   ![Imatge de Comparació](img/14.4_15_2000.png)
 
 - Explique, si existen. las discrepancias entre el etiquetado manual y la detección automática.
@@ -230,12 +232,10 @@ Ejercicios
 
   Tras aplicar estas mejoras y usar el umbral optimizado de 14.4, los resultados obtenidos con el script de evaluación son:
 
-```c
     **************** Summary ****************
     Recall V: 97.43%    Precision V: 87.97%    F-score V (2)  : 95.38%
     Recall S: 79.08%    Precision S: 95.14%    F-score S (1/2): 91.43%
     ===> TOTAL: 93.379%
-´´´
 
 
 ### Trabajos de ampliación
@@ -246,11 +246,22 @@ Ejercicios
   la que se vea con claridad la señal antes y después de la cancelación (puede que `wavesurfer` no sea la
   mejor opción para esto, ya que no es capaz de visualizar varias señales al mismo tiempo).
 
+  Para realizar esto hemos modificado el código de manera que cuando el detector esté en el estado de SILENCIO, las muestras de audio que se guardan en el fichero de salida se ponga a 0, así nos cargamos el ruido de fondo cuando nadie habla.
+
+  La cancelación queda todo plano donde hay silencio se pueden ver las diferencias respecto al original en el gráfico siguiente:
+  ![Audio cancelat i original comparativa ](img/audio_comparativa.png)
+
 #### Gestión de las opciones del programa usando `docopt_c`
 
 - Si ha usado `docopt_c` para realizar la gestión de las opciones y argumentos del programa `vad`, inserte
   una captura de pantalla en la que se vea el mensaje de ayuda del programa.
   
+  Hemos creado variables para: 
+  * ZCR: tasa de cruces por cero
+  * Histeresi: el tamaño de la ventana del ciclo de histeresi
+  * Silence Frame : como de grande és la trama de silencio
+  * Voice Frame : como de grande és la trama de voz
+
   ![Missatge ajuda](img/docopt_cap.png)
 
 
@@ -258,6 +269,8 @@ Ejercicios
 
 - Indique a continuación si ha realizado algún tipo de aportación suplementaria (algoritmos de detección o 
   parámetros alternativos, etc.).
+  
+  Para realizar esto hemos modificado el código de manera que cuando el detector esté en el estado de SILENCIO, las muestras de audio que se guardan en el fichero de salida se ponga a 0, así nos cargamos el ruido de fondo cuando nadie habla.
 
 - Si lo desea, puede realizar también algún comentario acerca de la realización de la práctica que
   considere de interés de cara a su evaluación.
