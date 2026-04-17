@@ -232,7 +232,8 @@ Ejercicios
 
   Tras aplicar estas mejoras y usar el umbral optimizado de 14.4, los resultados obtenidos con el script de evaluación son:
 
-    **************** Summary ****************
+  **************** Summary ****************
+
     Recall V: 97.43%    Precision V: 87.97%    F-score V (2)  : 95.38%
     Recall S: 79.08%    Precision S: 95.14%    F-score S (1/2): 91.43%
     ===> TOTAL: 93.379%
@@ -250,6 +251,7 @@ Ejercicios
 
   La cancelación queda todo plano donde hay silencio se pueden ver las diferencias respecto al original en el gráfico siguiente:
   ![Audio cancelat i original comparativa ](img/audio_comparativa.png)
+
 
 #### Gestión de las opciones del programa usando `docopt_c`
 
@@ -269,8 +271,6 @@ Ejercicios
 
 - Indique a continuación si ha realizado algún tipo de aportación suplementaria (algoritmos de detección o 
   parámetros alternativos, etc.).
-  
-  Para realizar esto hemos modificado el código de manera que cuando el detector esté en el estado de SILENCIO, las muestras de audio que se guardan en el fichero de salida se ponga a 0, así nos cargamos el ruido de fondo cuando nadie habla.
 
 - Si lo desea, puede realizar también algún comentario acerca de la realización de la práctica que
   considere de interés de cara a su evaluación.

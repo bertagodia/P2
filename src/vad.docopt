@@ -9,7 +9,7 @@ Options:
    -i FILE, --input-wav=FILE    WAVE file for voice activity detection
    -o FILE, --output-vad=FILE   Label file with the result of VAD
    -w FILE, --output-wav=FILE   WAVE file with silences cleared
-   -0 FLOAT, --alpha0=FLOAT      Increment per calcular llindar0 (dB) [default: 10]
+   -0 FLOAT, --alpha0=FLOAT      Increment per calcular llindar0 (dB) [default: 14.4]
    -z FLOAT, --zcr=FLOAT         Llindar ZCR [default: 500]
    -n INT, --hysteresis=INT      Trames d'histeresi [default: 15]
    -m FLOAT, --min-speech=FLOAT  Durada minima veu (ms) [default: 50]

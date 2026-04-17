@@ -41,7 +41,7 @@ const char help_message[] =
 "   -i FILE, --input-wav=FILE    WAVE file for voice activity detection\n"
 "   -o FILE, --output-vad=FILE   Label file with the result of VAD\n"
 "   -w FILE, --output-wav=FILE    WAVE file with silences cleared\n"
-"   -0 FLOAT, --alpha0=FLOAT      Increment per calcular llindar0 (dB) [default: 10]\n"
+"   -0 FLOAT, --alpha0=FLOAT      Increment per calcular llindar0 (dB) [default: 14.4]\n"
 "   -z FLOAT, --zcr=FLOAT         Llindar ZCR [default: 2000]\n"
 "   -n INT, --hysteresis=INT      Trames d'histeresi [default: 15]\n"
 "   -m FLOAT, --min-speech=FLOAT  Durada minima veu (ms) [default: 50]\n"
@@ -324,7 +324,7 @@ int elems_to_args(Elements *elements, DocoptArgs *args, bool help,
 
 DocoptArgs docopt(int argc, char *argv[], bool help, const char *version) {
     DocoptArgs args = {
-        0, 0, 0, (char*) "10", (char*) "2000", (char*) "15", (char*) "50", (char*) "100", NULL, NULL, NULL,
+        0, 0, 0, (char*) "14.4", (char*) "2000", (char*) "15", (char*) "50", (char*) "100", NULL, NULL, NULL,
         usage_pattern, help_message
     };
     Tokens ts;
