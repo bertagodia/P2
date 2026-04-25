@@ -60,8 +60,9 @@ VAD_DATA * vad_open(float rate) {
   vad_data->state = ST_INIT;
   vad_data->sampling_rate = rate;
   vad_data->frame_length = rate * FRAME_TIME * 1e-3;
+  /*vad_data->counter = 0;*/
   vad_data->hysteresis = 15;
-  vad_data->umbral_zcr = 500.0f;
+  vad_data->umbral_zcr = 3300.f;
   vad_data->min_speech_ms = 50.0f;
   vad_data->min_silence_ms = 100.0f;
   return vad_data;
@@ -109,24 +110,22 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
     break;
 
   case ST_SILENCE:
-    // Condicion de entrada a VOZ: Mucha potencia O potencia media con mucho ZCR (fricativas) 
     if (f.p > umbral_potencia || (f.p > umbral_potencia - 10.0f && f.zcr > umbral_zcr)) {
-      vad_data->state = ST_VOICE;
+      vad_data->state = ST_VOICE; // Entramos directo
       vad_data->counter = 0;
     }
     break;
 
   case ST_VOICE:
-    // Condicion de salida a SILENCIO: Solo si la potencia es baja 
     if (f.p < umbral_potencia) {
       vad_data->counter++;
-      // HISTERESIS: Solo cambiamos a silencio si llevamos N tramas de nivel bajo 
-      if (vad_data->counter > vad_data->hysteresis) {
+      // USAMOS MIN_SILENCE (Histéresis): ¿La pausa es lo suficientemente larga para rendirse?
+      if (vad_data->counter > (vad_data->min_silence_ms / FRAME_TIME)) {
         vad_data->state = ST_SILENCE;
         vad_data->counter = 0;
       }
     } else {
-      vad_data->counter = 0;
+      vad_data->counter = 0; // Sigue hablando, reseteamos contador de silencio
     }
     break;
 

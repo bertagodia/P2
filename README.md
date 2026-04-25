@@ -186,7 +186,7 @@ Ejercicios
     En extracción de características (Feature Extraction) se ha modificado la función compute_features para que el sistema no deje de tener en cuenta algunas las frecuencias. Ahora, además de la potencia, también hemos añadido que calcule el Zero Crossing Rate (ZCR) y la Amplitud Media (AM). Esto es fundamental porque sonidos como las fricativas tienen muy poca energía y el detector básico no las tenía en cuenta. Con el ZCR, detectamos esa alta frecuencia y mantenemos la detección de voz activa.
 
 
-    Lógica de Histéresis (Hangover): gracias a la histéresis, el detector automático puede mantener la etiqueta "VOZ" un poco más de tiempo después d euq ela señal baje un poco. Esto es muy útil porque evita cortar el final de las frases.  Utilizando el campo vad_data->counter, el sistema puede "acordarse" de que estava en un estado de voz, por lo tanto, no cambia al estado de silencio inmediatamente. Este contador cubre unos 100-150 ms de seguridad, lo que suaviza las transiciones y da mucha más continuidad a las frases.
+    Lógica de Histéresis (Hangover): gracias a la histéresis, el detector automático puede mantener la etiqueta "VOZ" un poco más de tiempo después de que la señal baje un poco. Esto es muy útil porque evita cortar el final de las frases.  Utilizando el campo vad_data->counter, el sistema puede "acordarse" de que estaba en un estado de voz, por lo tanto, no cambia al estado de silencio inmediatamente. Este contador cubre unos 100-150 ms de seguridad, lo que suaviza las transiciones y da mucha más continuidad a las frases.
 
 
     Optimización de parámetros: Para mirar el umbral indicado hemos hecho un barrido paramétrico, y hemos podido observar como con el umbral alpha = 14.4 el sistema alcanza su punto óptimo de compromiso entre Recall y Precision.
@@ -260,9 +260,9 @@ Ejercicios
   
   Hemos creado variables para: 
   * ZCR: tasa de cruces por cero
-  * Histeresi: el tamaño de la ventana del ciclo de histeresi
-  * Silence Frame : como de grande és la trama de silencio
-  * Voice Frame : como de grande és la trama de voz
+  * Histéresi: el tamaño de la ventana del ciclo de histeresi
+  * Silence Frame : como de grande es la trama de silencio
+  * Voice Frame : como de grande es la trama de voz
 
   ![Missatge ajuda](img/docopt_cap.png)
 
@@ -274,6 +274,24 @@ Ejercicios
 
 - Si lo desea, puede realizar también algún comentario acerca de la realización de la práctica que
   considere de interés de cara a su evaluación.
+
+  Al finalizar toda la práctica y la parte de ampliación hemos modificado los parámetros de alfa, zcr y el min_silence_ms (representa el tiempo que el VAD "se queda esperando" antes de confirmar que la voz se ha terminado) para poder obtener el porcentaje más óptimo global cuando miramos el Precision y el Recall de voz y sonido. Finalmente, estos parámetros los hemos puesto como parámetros predeterminados, lo que nos permite conseguir una mejor cancelación del sonido.
+
+  Estos valores consisten en alpha = 13.9, zcr = 3200 y min_silence_ms = 130. El resultado sería el siguiente:
+
+
+**************** Summary ****************
+Recall V:572.91/590.75 96.98%   Precision V:572.91/638.69 89.70%   F-score V (2)  : 95.43%
+Recall S:310.48/376.26 82.52%   Precision S:310.48/328.32 94.57%   F-score S (1/2): 91.88%
+===> TOTAL: 93.640%
+
+Para obtener el ciclo de histéresi (el número de tramas que nos tenemos que esperar) lo hacemos a través del min_silence_ms, dividiendo este valor entre la duración de la trama (FRAME_TIME).
+
+
+
+
+Vale aquí intentaria tornar a fer les gràfiques que havies fet abans a veure si ara es veuen millor amb aquests valors predeterminats.
+
 
 
 ### Antes de entregar la práctica
