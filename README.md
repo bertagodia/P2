@@ -152,12 +152,26 @@ Ejercicios
 
 - A la vista de la gráfica, indique qué valores considera adecuados para las magnitudes siguientes:
 
-  * Incremento del nivel potencia en dB, respecto al nivel correspondiente al silencio inicial, para
-    estar seguros de que un segmento de señal se corresponde con voz.
+  La grafica es la siguiente:
+
+  ![Wavesurfer_cap1](img/image.png)
+
+  * Incremento del nivel potencia en dB, respecto al nivel correspondiente al silencio inicial, para estar seguros de que un segmento de señal se corresponde con voz.
+
+    La poténcia correspondiente al silencio inicial esta alrededor de unos -60 dB en canvio el segment de voz varia entre (-35,-20)  dB asi que esto supone un incremento claro del nivel de potencia de unos 20 a 25 dB respecto al silencio de fondo.
 
   * Duración mínima razonable de los segmentos de voz y silencio.
 
+    Respecto a nuestro fichero, el segmento de voz medido dura 0.34 segundos (2.01 - 1.67) y el de silencio dura 0.18 segundos (2.18 - 2.0). A partir de esto, definimos los mínimos teóricos:
+
+      * Voz (mínimo 0.05 - 0.1s): Es el tiempo necesario para asegurar que el sonido es habla real y no un simple ruido corto o golpe.
+
+      * Silencio (mínimo 0.1 - 0.2s): Es el margen necesario para confirmar que hay una pausa real o fin de frase, evitando cortar la grabación durante los silencios súper cortos que hacemos de forma natural al articular palabras.
+
+
   * ¿Es capaz de sacar alguna conclusión a partir de la evolución de la tasa de cruces por cero?
+
+    La tasa de cruces por cero (ZCR) no permite detectar silencios por sí sola debido al ruido inestable de fondo.Para poder hacer un buen analisi se necessita comparar con el nivel de energía.Un ZCR bajo con picos de energía representa vocales o sonidos sonoros en cambio un ZCR alto i poca energia quiere decir que tenemos consonantes sordas. El silencio real solo se decide si se tiene energía minima absoluta, sin mirar ZCR.
 
 
 ### Desarrollo del detector de actividad vocal
@@ -165,31 +179,51 @@ Ejercicios
 - Complete el código de los ficheros de la práctica para implementar un detector de actividad vocal en
   tiempo real tan exacto como sea posible. Tome como objetivo la maximización de la puntuación-F `TOTAL`.
 
+    Para cumplir con el objetivo de maximizar el F-score TOTAL, hemos hecho algunos pequeños cambios en la lógica del detector básico (que solo dependía de la energía) haciendo que ahora dependa también de otros parámetros. 
+  
+    Las nuevas implementaciones han sido:
+
+    En extracción de características (Feature Extraction) se ha modificado la función compute_features para que el sistema no deje de tener en cuenta algunas las frecuencias. Ahora, además de la potencia, también hemos añadido que calcule el Zero Crossing Rate (ZCR) y la Amplitud Media (AM). Esto es fundamental porque sonidos como las fricativas tienen muy poca energía y el detector básico no las tenía en cuenta. Con el ZCR, detectamos esa alta frecuencia y mantenemos la detección de voz activa.
 
 
-Para cumplir con el objetivo de maximizar el F-score TOTAL, hemos hecho algunos pequeños cambios en la lógica del detector básico (que solo dependía de la energía) haciendo que ahora dependa también de otros parámetros. Las nuevas implementaciones han sido:
-
-En extracción de características (Feature Extraction) se ha modificado la función compute_features para que el sistema no deje de tener en cuenta algunas las frecuencias. Ahora, además de la potencia, también hemos añadido que calcule el Zero Crossing Rate (ZCR) y la Amplitud Media (AM). Esto es fundamental porque sonidos como las fricativas tienen muy poca energía y el detector básico no las tenía en cuenta. Con el ZCR, detectamos esa alta frecuencia y mantenemos la detección de voz activa.
-
-Lógica de Histéresis (Hangover): gracias a la histéresis, el detector automático puede mantener la etiqueta "VOZ" un poco más de tiempo después d euq ela señal baje un poco. Esto es muy útil porque evita cortar el final de las frases.  Utilizando el campo vad_data->counter, el sistema puede "acordarse" de que estava en un estado de voz, por lo tanto, no cambia al estado de silencio inmediatamente. Este contador cubre unos 100-150 ms de seguridad, lo que suaviza las transiciones y da mucha más continuidad a las frases.
-
-Optimización de parámetros: Para mirar el umbral indicado hemos hecho un barrido paramétrico, y hemos podido observar como con el umbral alpha = 14.4 el sistema alcanza su punto óptimo de compromiso entre Recall y Precision. 
+    Lógica de Histéresis (Hangover): gracias a la histéresis, el detector automático puede mantener la etiqueta "VOZ" un poco más de tiempo después d euq ela señal baje un poco. Esto es muy útil porque evita cortar el final de las frases.  Utilizando el campo vad_data->counter, el sistema puede "acordarse" de que estava en un estado de voz, por lo tanto, no cambia al estado de silencio inmediatamente. Este contador cubre unos 100-150 ms de seguridad, lo que suaviza las transiciones y da mucha más continuidad a las frases.
 
 
+    Optimización de parámetros: Para mirar el umbral indicado hemos hecho un barrido paramétrico, y hemos podido observar como con el umbral alpha = 14.4 el sistema alcanza su punto óptimo de compromiso entre Recall y Precision.
 
 - Inserte una gráfica en la que se vea con claridad la señal temporal, el etiquetado manual y la detección
   automática conseguida para el fichero grabado al efecto. 
 
+  Lo hemos hecho con un umbral de alpha de 14.4, ciclo de histéresi n=15 y tasa de cruces por zero de z=2000
+
+  ![Imatge de Comparació](img/14.4_15_2000.png)
+
 - Explique, si existen. las discrepancias entre el etiquetado manual y la detección automática.
 
-Això s'haurà de modificar!!!!!!!!!! és una possibl hipòtesi
+  Las principales diferencias son:
 
-Al comparar mi detector con el etiquetado manual, noto un par de cosas interesantes:
+    1. **Múltiples segmentos cortos**
+       El etiquetado automático divide regiones que el manual marca como contínuas:
+       - **Manual**: 1.47s - 1.69s es un solo silencio
+       - **Automático**: Lo divide en 4 segmentos cortos (1.47-1.48, 1.64-1.68, etc.)
 
-El efecto del Hangover: Mi detector siempre tarda un poco más que el humano en "cerrar" la etiqueta de voz al final de una frase. Esto es intencionado: prefiero penalizar un poco la precisión en el silencio para asegurar que no cortamos el final de las palabras.
+    2. **Segmento inicial**
+       - **Manual**: Comienza directamente con VOZ (0.003s)
+       - **Automático**: Incluye un breve SILENCIO inicial (0.0-0.01s) antes de detectar voz
 
-Sensibilidad a transitorios: Gracias al ZCR, mi detector a veces pilla sonidos de aire o respiraciones que en el etiquetado manual se marcaron como silencio, lo que explica que la precisión de voz sea algo más baja que el recall.
+    3. **Franjas temporales**
+       Los inicios y finales de cada segmento no coinciden exactamente:
 
+       | Región    | Manual        | Automático    |
+       |----------|---------------|--------------|
+       | 1a voz   | 0.003-0.36    | 0.01-0.53    |
+       | Silencio  | 0.36-0.72     | 0.53-0.56    |
+
+    **Causas de las discrepancias:**
+
+    - **Histéresis**: El umbral de salida del silencio es muy bajo (15 tramas de baja potencia), creando segmentos cortos
+    - **Tramas de transición**: La detección automática captura cambios rápidos que el ojo humano no percibe
+    - **Alpha0**: El parámetro de umbral influye en cuando se considera voz o silencio
 
 
 - Evalúe los resultados sobre la base de datos `db.v4` con el script `vad_evaluation.pl` e inserte a 
@@ -198,10 +232,11 @@ Sensibilidad a transitorios: Gracias al ZCR, mi detector a veces pilla sonidos d
 
   Tras aplicar estas mejoras y usar el umbral optimizado de 14.4, los resultados obtenidos con el script de evaluación son:
 
-**************** Summary ****************
-Recall V: 97.43%    Precision V: 87.97%    F-score V (2)  : 95.38%
-Recall S: 79.08%    Precision S: 95.14%    F-score S (1/2): 91.43%
-===> TOTAL: 93.379%
+  **************** Summary ****************
+
+    Recall V: 97.43%    Precision V: 87.97%    F-score V (2)  : 95.38%
+    Recall S: 79.08%    Precision S: 95.14%    F-score S (1/2): 91.43%
+    ===> TOTAL: 93.379%
 
 
 ### Trabajos de ampliación
@@ -212,14 +247,24 @@ Recall S: 79.08%    Precision S: 95.14%    F-score S (1/2): 91.43%
   la que se vea con claridad la señal antes y después de la cancelación (puede que `wavesurfer` no sea la
   mejor opción para esto, ya que no es capaz de visualizar varias señales al mismo tiempo).
 
+  Para realizar esto hemos modificado el código de manera que cuando el detector esté en el estado de SILENCIO, las muestras de audio que se guardan en el fichero de salida se ponga a 0, así nos cargamos el ruido de fondo cuando nadie habla.
 
-Para realizar esto hemos modificado el código de manera que cuando el detector esté en el estado de SILENCIO, las muestras de audio que se guardan en el fichero de salida se ponga a 0, así nos cargamos el ruido de fondo cuando nadie habla.
+  La cancelación queda todo plano donde hay silencio se pueden ver las diferencias respecto al original en el gráfico siguiente:
+  ![Audio cancelat i original comparativa ](img/audio_comparativa.png)
 
 
 #### Gestión de las opciones del programa usando `docopt_c`
 
 - Si ha usado `docopt_c` para realizar la gestión de las opciones y argumentos del programa `vad`, inserte
   una captura de pantalla en la que se vea el mensaje de ayuda del programa.
+  
+  Hemos creado variables para: 
+  * ZCR: tasa de cruces por cero
+  * Histeresi: el tamaño de la ventana del ciclo de histeresi
+  * Silence Frame : como de grande és la trama de silencio
+  * Voice Frame : como de grande és la trama de voz
+
+  ![Missatge ajuda](img/docopt_cap.png)
 
 
 ### Contribuciones adicionales y/o comentarios acerca de la práctica
