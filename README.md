@@ -179,21 +179,25 @@ Ejercicios
 - Complete el código de los ficheros de la práctica para implementar un detector de actividad vocal en
   tiempo real tan exacto como sea posible. Tome como objetivo la maximización de la puntuación-F `TOTAL`.
 
-    Para cumplir con el objetivo de maximizar el F-score TOTAL, hemos hecho algunos pequeños cambios en la lógica del detector básico (que solo dependía de la energía) haciendo que ahora dependa también de otros parámetros. 
-  
-    Las nuevas implementaciones han sido:
+  Para cumplir con el objetivo de maximizar el F-score TOTAL, hemos hecho algunos pequeños cambios en la lógica del detector básico (que solo dependía de la energía) haciendo que ahora dependa también de otros parámetros. 
 
-    En extracción de características (Feature Extraction) se ha modificado la función compute_features para que el sistema no deje de tener en cuenta algunas las frecuencias. Ahora, además de la potencia, también hemos añadido que calcule el Zero Crossing Rate (ZCR) y la Amplitud Media (AM). Esto es fundamental porque sonidos como las fricativas tienen muy poca energía y el detector básico no las tenía en cuenta. Con el ZCR, detectamos esa alta frecuencia y mantenemos la detección de voz activa.
+      Las nuevas implementaciones han sido:
+
+      **Extracción de características (Feature Extraction)**  se ha modificado la función compute_features para que el sistema no deje de tener en cuenta algunas las frecuencias. Ahora, además de la potencia, también hemos añadido que calcule el Zero Crossing Rate (ZCR) y la Amplitud Media (AM). Esto es fundamental porque sonidos como las fricativas tienen muy poca energía y el detector básico no las tenía en cuenta. Con el ZCR, detectamos esa alta frecuencia y mantenemos la detección de voz activa.
 
 
-    Lógica de Histéresis (Hangover): gracias a la histéresis, el detector automático puede mantener la etiqueta "VOZ" un poco más de tiempo después de que la señal baje un poco. Esto es muy útil porque evita cortar el final de las frases.  Utilizando el campo vad_data->counter, el sistema puede "acordarse" de que estaba en un estado de voz, por lo tanto, no cambia al estado de silencio inmediatamente. Este contador cubre unos 100-150 ms de seguridad, lo que suaviza las transiciones y da mucha más continuidad a las frases.
+      **Lógica de Histéresis (Hangover)**: gracias a la histéresis, el detector automático puede mantener la etiqueta "VOZ" un poco más de tiempo después de que la señal baje un poco. Esto es muy útil porque evita cortar el final de las frases.  Utilizando el campo vad_data->counter, el sistema puede "acordarse" de que estaba en un estado de voz, por lo tanto, no cambia al estado de silencio inmediatamente. Este contador cubre unos 100-150 ms de seguridad, lo que suaviza las transiciones y da mucha más continuidad a las frases. La histéresis utilizada ha sido de 11 tramas, que es la optima (110ms / 10ms = 11 frames).
 
 
 
 - Inserte una gráfica en la que se vea con claridad la señal temporal, el etiquetado manual y la detección
   automática conseguida para el fibrinio grabado al efecto. 
 
-  Lo hemos hecho con un umbral de alpha de 12, silenci de 110ms y zcr detasa de cruces por zero de z=3500
+  Los valoreshan sido:
+      - **Alpha0** : 12
+      - **ZCR**: 3500  
+      - **min_silence_ms**: 110ms
+      - **Margen ZCR**: -7dB 
 
   ![Imatge de Comparació](img/labels_comparativa.png)
 
@@ -207,7 +211,7 @@ Ejercicios
        - **Automático**: Lo divide en 4 segmentos cortos (1.47-1.48, 1.64-1.68, etc.)
 
     2. **Segmento inicial**
-       - **Manual**: Comienza directamente con VOZ (0.003s)
+       - **Manual**: Comienza directamente con VOZ en el segundo (0.003s)
        - **Automático**: Incluye un breve SILENCIO inicial (0.0-0.01s) antes de detectar voz
 
     3. **Franjas temporales**
@@ -281,9 +285,14 @@ Ejercicios
 
     Para obtener el ciclo de histéresi (el número de tramas que nos tenemos que esperar) lo hacemos a través del min_silence_ms, dividiendo este valor entre la duración de la trama (frametime).
    
-    Al finalizar toda la práctica y la parte de ampliación hemos modificado los parámetros de alfa, zcr y el min_silence_ms (representa el tiempo que el VAD "se queda esperando" antes de confirmar que la voz se ha terminado) para poder obtener el porcentaje más óptimo global cuando miramos el Precision y el Recall de voz y sonido. Finalmente, estos parámetros los hemos puesto como parámetros por defecto, lo que nos permite conseguir una mejor cancelación del sonido.
+    **Optimización de parametros** Al finalizar toda la práctica y la parte de ampliación hemos modificado los parámetros de alfa, zcr y el min_silence_ms (representa el tiempo que el VAD "se queda esperando" antes de confirmar que la voz se ha terminado) para poder obtener el porcentaje más óptimo global cuando miramos el Precision y el Recall de voz y sonido. Finalmente, estos parámetros los hemos puesto como parámetros por defecto, lo que nos permite conseguir una mejor cancelación del sonido.
 
-    Estos valores consisten en alpha = 12, zcr = 3500 y min_silence_ms = 110. El resultado sería el siguiente:
+    Los valores probados durante la optimización han sido:
+    - **Alpha0**: de 8 a 16 → óptimo = 12
+    - **ZCR**: de 2000 a 5000 → óptimo = 3500  
+    - **min_silence_ms**: de 50 a 200ms → óptimo = 110ms
+
+   Con los valores optimizados tenemos el resultado siguiente:
 
     ```c
     **************** Summary ****************
