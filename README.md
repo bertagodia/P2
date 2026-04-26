@@ -264,7 +264,7 @@ Ejercicios
   * Frametime: el tamaño de la ventana, que luego usaremos para calcular la histeresi
   * Silence Frame : como de grande es la trama de silencio
   * Voice Frame : como de grande es la trama de voz
-
+![alt text](image.png)
   ![Missatge ajuda](img/docopt.png)
 
 
