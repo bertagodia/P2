@@ -231,11 +231,13 @@ Optimización de parámetros: Para mirar el umbral indicado hemos hecho un barri
   el resumen).
 
   Tras aplicar estas mejoras y usar el umbral optimizado de 12, los resultados obtenidos con el script de evaluación son:
- 
+  
+  ```c
   **************** Summary ****************
     Recall V:575.79/590.75 97.47%   Precision V:575.79/647.51 88.92%   F-score V (2)  : 95.63%
     Recall S:304.54/376.26 80.94%   Precision S:304.54/319.50 95.32%   F-score S (1/2): 92.05%
     ===> TOTAL: 93.822%
+  ```
 
 
 ### Trabajos de ampliación
@@ -278,18 +280,18 @@ Optimización de parámetros: Para mirar el umbral indicado hemos hecho un barri
 
   Estos valores consisten en alpha = 12, zcr = 3500 y min_silence_ms = 110. El resultado sería el siguiente:
 
-
+  ```c
   *************** Summary ****************
   Recall V:572.91/590.75 96.98%   Precision V:572.91/638.69 89.70%   F-score V (2)  : 95.43%
   Recall S:310.48/376.26 82.52%   Precision S:310.48/328.32 94.57%   F-score S (1/2): 91.88%
   ===> TOTAL: 93.822%
+  ```
 
   Para obtener el ciclo de histéresi (el número de tramas que nos tenemos que esperar) lo hacemos a través del min_silence_ms, dividiendo este valor entre la duración de la trama (frametime).
 
 
 
 
-Vale aquí intentaria tornar a fer les gràfiques que havies fet abans a veure si ara es veuen millor amb aquests valors predeterminats.
 
 
 
