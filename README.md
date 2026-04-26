@@ -176,28 +176,27 @@ Ejercicios
 
 ### Desarrollo del detector de actividad vocal
 
-- Complete el código de los ficheros de la práctica para implementar un detector de actividad vocal en
-  tiempo real tan exacto como sea posible. Tome como objetivo la maximización de la puntuación-F `TOTAL`.
+- Complete el código de los ficheros de la práctica para implementar un detector de actividad vocal en tiempo real tan exacto como sea posible. Tome como objetivo la maximización de la puntuación-F `TOTAL`.
 
   Para cumplir con el objetivo de maximizar el F-score TOTAL, hemos hecho algunos pequeños cambios en la lógica del detector básico (que solo dependía de la energía) haciendo que ahora dependa también de otros parámetros. 
 
-      Las nuevas implementaciones han sido:
+  Las nuevas implementaciones han sido:
 
-      **Extracción de características (Feature Extraction)**  se ha modificado la función compute_features para que el sistema no deje de tener en cuenta algunas las frecuencias. Ahora, además de la potencia, también hemos añadido que calcule el Zero Crossing Rate (ZCR) y la Amplitud Media (AM). Esto es fundamental porque sonidos como las fricativas tienen muy poca energía y el detector básico no las tenía en cuenta. Con el ZCR, detectamos esa alta frecuencia y mantenemos la detección de voz activa.
+  **Extracción de características (Feature Extraction)**  se ha modificado la función compute_features para que el sistema no deje de tener en cuenta algunas las frecuencias. Ahora, además de la potencia, también hemos añadido que calcule el Zero Crossing Rate (ZCR) y la Amplitud Media (AM). Esto es fundamental porque sonidos como las fricativas tienen muy poca energía y el detector básico no las tenía en cuenta. Con el ZCR, detectamos esa alta frecuencia y mantenemos la detección de voz activa.
 
 
-      **Lógica de Histéresis (Hangover)**: gracias a la histéresis, el detector automático puede mantener la etiqueta "VOZ" un poco más de tiempo después de que la señal baje un poco. Esto es muy útil porque evita cortar el final de las frases.  Utilizando el campo vad_data->counter, el sistema puede "acordarse" de que estaba en un estado de voz, por lo tanto, no cambia al estado de silencio inmediatamente. Este contador cubre unos 100-150 ms de seguridad, lo que suaviza las transiciones y da mucha más continuidad a las frases. La histéresis utilizada ha sido de 11 tramas, que es la optima (110ms / 10ms = 11 frames).
+  **Lógica de Histéresis (Hangover)**: gracias a la histéresis, el detector automático puede mantener la etiqueta "VOZ" un poco más de tiempo después de que la señal baje un poco. Esto es muy útil porque evita cortar el final de las frases.  Utilizando el campo vad_data->counter, el sistema puede "acordarse" de que estaba en un estado de voz, por lo tanto, no cambia al estado de silencio inmediatamente. Este contador cubre unos 100-150 ms de seguridad, lo que suaviza las transiciones y da mucha más continuidad a las frases. La histéresis utilizada ha sido de 11 tramas, que es la optima (110ms / 10ms = 11 frames).
 
 
 
 - Inserte una gráfica en la que se vea con claridad la señal temporal, el etiquetado manual y la detección
   automática conseguida para el fibrinio grabado al efecto. 
 
-  Los valoreshan sido:
-      - **Alpha0** : 12
-      - **ZCR**: 3500  
-      - **min_silence_ms**: 110ms
-      - **Margen ZCR**: -7dB 
+  Los valores han sido:
+  - **Alpha0** : 12
+  - **ZCR**: 3500  
+  - **min_silence_ms**: 110ms
+  - **Margen ZCR**: -7dB 
 
   ![Imatge de Comparació](img/labels_comparativa.png)
 
