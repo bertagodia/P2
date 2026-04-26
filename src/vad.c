@@ -65,7 +65,7 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
     break;
 
   case ST_SILENCE:
-    if (f.p > umbral_potencia || (f.p > umbral_potencia - 10.0f && f.zcr > umbral_zcr)) {
+    if (f.p > umbral_potencia || (f.p > umbral_potencia - 7.0f && f.zcr > umbral_zcr)) {
         vad_data->state = ST_VOICE;
         vad_data->counter = 0;
     }
