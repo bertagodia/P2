@@ -41,11 +41,11 @@ const char help_message[] =
 "   -i FILE --input-wav FILE         WAVE file for voice activity detection\n"
 "   -o FILE --output-vad FILE        Label file with the result of VAD\n"
 "   -w FILE --output-wav FILE       WAVE file with silences cleared\n"
-"   -0 FLOAT --alpha0 FLOAT         Increment per calcular llindar0 (dB) [default: 13.9]\n"
-"   -z FLOAT --zcr FLOAT            Llindar ZCR [default: 3200]\n"
+"   -0 FLOAT --alpha0 FLOAT         Increment per calcular llindar0 (dB) [default: 12]\n"
+"   -z FLOAT --zcr FLOAT            Llindar ZCR [default: 3500]\n"
 "   -f INT --frametime INT          Temps de Trames    [default: 10]\n"
 "   -m FLOAT --min-speech FLOAT    Durada minima veu (ms) [default: 50]\n"
-"   -s FLOAT --min-silence FLOAT   Durada minima silenci (ms) [default: 130]\n"
+"   -s FLOAT --min-silence FLOAT   Durada minima silenci (ms) [default: 110]\n"
 "   -v --verbose                  Show debug information\n"
 "   -h --help                   Show this screen\n"
 "   --version                    Show the version of the project\n"
@@ -324,8 +324,8 @@ int elems_to_args(Elements *elements, DocoptArgs *args, bool help,
 
 DocoptArgs docopt(int argc, char *argv[], bool help, const char *version) {
     DocoptArgs args = {
-        0, 0, 0, (char*) "13.9", (char*) "10", NULL, (char*) "130", (char*)
-        "50", NULL, NULL, (char*) "3200",
+        0, 0, 0, (char*) "12", (char*) "10", NULL, (char*) "110", (char*) "50",
+        NULL, NULL, (char*) "3500",
         usage_pattern, help_message
     };
     Tokens ts;
@@ -355,3 +355,4 @@ DocoptArgs docopt(int argc, char *argv[], bool help, const char *version) {
         exit(EXIT_SUCCESS);
     return args;
 }
+

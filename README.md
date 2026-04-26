@@ -189,12 +189,12 @@ Ejercicios
     Lógica de Histéresis (Hangover): gracias a la histéresis, el detector automático puede mantener la etiqueta "VOZ" un poco más de tiempo después de que la señal baje un poco. Esto es muy útil porque evita cortar el final de las frases.  Utilizando el campo vad_data->counter, el sistema puede "acordarse" de que estaba en un estado de voz, por lo tanto, no cambia al estado de silencio inmediatamente. Este contador cubre unos 100-150 ms de seguridad, lo que suaviza las transiciones y da mucha más continuidad a las frases.
 
 
-    Optimización de parámetros: Para mirar el umbral indicado hemos hecho un barrido paramétrico, y hemos podido observar como con el umbral alpha = 13.9 el sistema alcanza su punto óptimo de compromiso entre Recall y Precision.
+Optimización de parámetros: Para mirar el umbral indicado hemos hecho un barrido paramétrico, y hemos podido observar como con el umbral alpha = 12 el sistema alcanza su punto óptimo de compromiso entre Recall y Precision.
 
 - Inserte una gráfica en la que se vea con claridad la señal temporal, el etiquetado manual y la detección
-  automática conseguida para el fichero grabado al efecto. 
+  automática conseguida para el fibrinio grabado al efecto. 
 
-  Lo hemos hecho con un umbral de alpha de 13.9, silenci de 130ms y zcr detasa de cruces por zero de z=3200
+  Lo hemos hecho con un umbral de alpha de 12, silenci de 110ms y zcr detasa de cruces por zero de z=3500
 
   ![Imatge de Comparació](img/labels_comparativa.png)
 
@@ -230,13 +230,12 @@ Ejercicios
   continuación las tasas de sensibilidad (*recall*) y precisión para el conjunto de la base de datos (sólo
   el resumen).
 
-  Tras aplicar estas mejoras y usar el umbral optimizado de 13.9, los resultados obtenidos con el script de evaluación son:
-
+  Tras aplicar estas mejoras y usar el umbral optimizado de 12, los resultados obtenidos con el script de evaluación son:
+ 
   **************** Summary ****************
-
-    Recall V: 97.43%    Precision V: 87.97%    F-score V (2)  : 95.38%
-    Recall S: 79.08%    Precision S: 95.14%    F-score S (1/2): 91.43%
-    ===> TOTAL: 93.379%
+    Recall V:575.79/590.75 97.47%   Precision V:575.79/647.51 88.92%   F-score V (2)  : 95.63%
+    Recall S:304.54/376.26 80.94%   Precision S:304.54/319.50 95.32%   F-score S (1/2): 92.05%
+    ===> TOTAL: 93.822%
 
 
 ### Trabajos de ampliación
@@ -277,15 +276,15 @@ Ejercicios
 
   Al finalizar toda la práctica y la parte de ampliación hemos modificado los parámetros de alfa, zcr y el min_silence_ms (representa el tiempo que el VAD "se queda esperando" antes de confirmar que la voz se ha terminado) para poder obtener el porcentaje más óptimo global cuando miramos el Precision y el Recall de voz y sonido. Finalmente, estos parámetros los hemos puesto como parámetros predeterminados, lo que nos permite conseguir una mejor cancelación del sonido.
 
-  Estos valores consisten en alpha = 13.9, zcr = 3200 y min_silence_ms = 130. El resultado sería el siguiente:
+  Estos valores consisten en alpha = 12, zcr = 3500 y min_silence_ms = 110. El resultado sería el siguiente:
 
 
-**************** Summary ****************
-Recall V:572.91/590.75 96.98%   Precision V:572.91/638.69 89.70%   F-score V (2)  : 95.43%
-Recall S:310.48/376.26 82.52%   Precision S:310.48/328.32 94.57%   F-score S (1/2): 91.88%
-===> TOTAL: 93.640%
+  *************** Summary ****************
+  Recall V:572.91/590.75 96.98%   Precision V:572.91/638.69 89.70%   F-score V (2)  : 95.43%
+  Recall S:310.48/376.26 82.52%   Precision S:310.48/328.32 94.57%   F-score S (1/2): 91.88%
+  ===> TOTAL: 93.822%
 
-Para obtener el ciclo de histéresi (el número de tramas que nos tenemos que esperar) lo hacemos a través del min_silence_ms, dividiendo este valor entre la duración de la trama (FRAME_TIME).
+  Para obtener el ciclo de histéresi (el número de tramas que nos tenemos que esperar) lo hacemos a través del min_silence_ms, dividiendo este valor entre la duración de la trama (frametime).
 
 
 

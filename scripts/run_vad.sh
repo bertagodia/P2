@@ -1,8 +1,8 @@
 #!/bin/bash
 
-alpha0=${1:-13.9} 
-zcr_value=${2:-3200}
-sil_ms=${3:-130}
+alpha0=${1:-12} 
+zcr_value=${2:-3500}
+sil_ms=${3:-110}
 
 # Be sure that this file has execution permissions:
 # Use the nautilus explorer or chmod +x run_vad.sh
