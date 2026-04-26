@@ -277,14 +277,14 @@ Ejercicios
    
 
     **Implementación de min_silence_ms:** El parámetro min_silence_ms (110ms) se utiliza para calcular el período de histéresis o "hangover". El VAD espera 11 tramas consecutivas (110ms / 10ms = 11 frames) por debajo del umbral antes de cambiar de VOZ a SILENCIO. Esto evita cortar frases naturales con silencios cortos entre palabras.
-    
+
     Para obtener el ciclo de histéresi (el número de tramas que nos tenemos que esperar) lo hacemos a través del min_silence_ms, dividiendo este valor entre la duración de la trama (frametime).
    
     Al finalizar toda la práctica y la parte de ampliación hemos modificado los parámetros de alfa, zcr y el min_silence_ms (representa el tiempo que el VAD "se queda esperando" antes de confirmar que la voz se ha terminado) para poder obtener el porcentaje más óptimo global cuando miramos el Precision y el Recall de voz y sonido. Finalmente, estos parámetros los hemos puesto como parámetros por defecto, lo que nos permite conseguir una mejor cancelación del sonido.
 
     Estos valores consisten en alpha = 12, zcr = 3500 y min_silence_ms = 110. El resultado sería el siguiente:
 
-   ```c
+    ```c
     **************** Summary ****************
       Recall V:575.79/590.75 97.47%   Precision V:575.79/647.51 88.92%   F-score V (2)  : 95.63%
       Recall S:304.54/376.26 80.94%   Precision S:304.54/319.50 95.32%   F-score S (1/2): 92.05%
@@ -292,16 +292,16 @@ Ejercicios
     ```
     **Mejora del umbral ZCR (-7dB):** Además de buscar los valores óptimos de los parámetros mediante barrido paramétrico (alpha=12, zcr=3500, min_silence_ms=110), hemos implementado una mejora adicional en el código del VAD. En el código original, la condición para detectar voz cuando la energía está cerca del umbral utilizaba un margen de -10dB (f.p > umbral_potencia - 10dB && f.zcr > umbral_zcr). Hemos reducido este margen a -7dB, lo que permite detectar mejor segmentos de voz que tienen una energía moderada pero un ZCR alto (como fricativas o consonantes sordas). Esta mejora relaja ligeramente la condición de transición de silencio a voz, resultando en una mejora del F-score TOTAL del 93.822% al 94.007%.
     
-        ```c
+      ```c
         if (f.p > umbral_potencia || (f.p > umbral_potencia - 7.0f && f.zcr > umbral_zcr))
-        ```
+      ```
 
       Luego de implementar la mejora nos queda el resultado final de:
       ```c
-          **************** Summary ****************
-            Recall V:575.65/590.75 97.44%   Precision V:575.65/643.61 89.44%   F-score V (2)  : 95.73%
-            Recall S:308.30/376.26 81.94%   Precision S:308.30/323.40 95.33%   F-score S (1/2): 92.31%
-            ===> TOTAL: 94.007%
+        **************** Summary ****************
+          Recall V:575.65/590.75 97.44%   Precision V:575.65/643.61 89.44%   F-score V (2)  : 95.73%
+          Recall S:308.30/376.26 81.94%   Precision S:308.30/323.40 95.33%   F-score S (1/2): 92.31%
+          ===> TOTAL: 94.007%
       ```
 
 
