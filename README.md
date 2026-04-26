@@ -306,7 +306,7 @@ Ejercicios
 
       ![Comparativa -10dB vs -7dB](img/comparativa_10db_vs_7db.png)
       
-      Luego de implementar la mejora nos queda el resultado final de:
+    Luego de implementar la mejora nos queda el resultado final de:
 
     ```c
       **************** Summary ****************
