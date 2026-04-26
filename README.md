@@ -233,9 +233,9 @@ Ejercicios
 
   ```c
   **************** Summary ****************
-      Recall V:575.65/590.75 97.44%   Precision V:575.65/643.61 89.44%   F-score V (2)  : 95.73%
-      Recall S:308.30/376.26 81.94%   Precision S:308.30/323.40 95.33%   F-score S (1/2): 92.31%
-      ===> TOTAL: 94.007%
+    Recall V:575.41/590.75 97.40%   Precision V:575.41/642.55 89.55%   F-score V (2)  : 95.73%
+    Recall S:309.12/376.26 82.16%   Precision S:309.12/324.46 95.27%   F-score S (1/2): 92.33%
+    ===> TOTAL: 94.010%
   ```
 
 
@@ -251,6 +251,7 @@ Ejercicios
 
   La cancelación queda todo plano donde hay silencio se pueden ver las diferencias respecto al original en el gráfico siguiente:
   ![Audio cancelat i original comparativa ](img/audio_comparativa.png)
+
 
 
 #### Gestión de las opciones del programa usando `docopt_c`
@@ -290,7 +291,7 @@ Ejercicios
       Recall S:304.54/376.26 80.94%   Precision S:304.54/319.50 95.32%   F-score S (1/2): 92.05%
       ===> TOTAL: 93.822%
     ```
-    **Mejora del umbral ZCR (-7dB):** Además de buscar los valores óptimos de los parámetros mediante barrido paramétrico (alpha=12, zcr=3500, min_silence_ms=110), hemos implementado una mejora adicional en el código del VAD. En el código original, la condición para detectar voz cuando la energía está cerca del umbral utilizaba un margen de -10dB (f.p > umbral_potencia - 10dB && f.zcr > umbral_zcr). Hemos reducido este margen a -7dB, lo que permite detectar mejor segmentos de voz que tienen una energía moderada pero un ZCR alto (como fricativas o consonantes sordas). Esta mejora relaja ligeramente la condición de transición de silencio a voz, resultando en una mejora del F-score TOTAL del 93.822% al 94.007%.
+    **Mejora del umbral ZCR (-7dB):** Además de buscar los valores óptimos de los parámetros mediante barrido paramétrico (alpha=12, zcr=3500, min_silence_ms=110), hemos implementado una mejora adicional en el código del VAD. En el código original, la condición para detectar voz cuando la energía está cerca del umbral utilizaba un margen de -10dB (f.p > umbral_potencia - 10dB && f.zcr > umbral_zcr). Hemos reducido este margen a -7dB, lo que permite detectar mejor segmentos de voz que tienen una energía moderada pero un ZCR alto (como fricativas o consonantes sordas). Esta mejora relaja ligeramente la condición de transición de silencio a voz, resultando en una mejora del F-score TOTAL del 93.822% al 94.010%.
     
     ```c
       if (f.p > umbral_potencia || (f.p > umbral_potencia - 7.0f && f.zcr > umbral_zcr))
@@ -300,10 +301,15 @@ Ejercicios
 
     ```c
       **************** Summary ****************
-      Recall V:575.65/590.75 97.44%   Precision V:575.65/643.61 89.44%   F-score V (2)  : 95.73%
-      Recall S:308.30/376.26 81.94%   Precision S:308.30/323.40 95.33%   F-score S (1/2): 92.31%
-      ===> TOTAL: 94.007%
+      Recall V:575.41/590.75 97.40%   Precision V:575.41/642.55 89.55%   F-score V (2)  : 95.73%
+      Recall S:309.12/376.26 82.16%   Precision S:309.12/324.46 95.27%   F-score S (1/2): 92.33%
+      ===> TOTAL: 94.010%
     ```
+     **Comparación: -10dB vs -7dB:**
+      La siguiente gráfica muestra la diferencia entre el algoritmo original (-10dB) y el mejorado (-7dB):
+         - Con -10dB: más fragmentos, transiciones más estrictas
+         - Con -7dB: más continuidad, mejor detección de fricativas
+      ![Comparativa -10dB vs -7dB](img/comparativa_10db_vs_7db.png)
 
 
 ### Antes de entregar la práctica
