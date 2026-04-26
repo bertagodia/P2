@@ -296,8 +296,14 @@ Ejercicios
     ```c
       if (f.p > umbral_potencia || (f.p > umbral_potencia - 7.0f && f.zcr > umbral_zcr))
     ```
-
-    Luego de implementar la mejora nos queda el resultado final de:
+    
+    **Comparación: -10dB vs -7dB:**
+      La siguiente gráfica muestra la diferencia entre el algoritmo original (-10dB) y el mejorado (-7dB):
+      * Con -10dB: más fragmentos, transiciones más estrictas
+      * Con -7dB: más continuidad, mejor detección de fricativas
+      ![Comparativa -10dB vs -7dB](img/comparativa_10db_vs_7db.png)
+      
+      Luego de implementar la mejora nos queda el resultado final de:
 
     ```c
       **************** Summary ****************
@@ -305,11 +311,7 @@ Ejercicios
       Recall S:309.12/376.26 82.16%   Precision S:309.12/324.46 95.27%   F-score S (1/2): 92.33%
       ===> TOTAL: 94.010%
     ```
-     **Comparación: -10dB vs -7dB:**
-      La siguiente gráfica muestra la diferencia entre el algoritmo original (-10dB) y el mejorado (-7dB):
-         - Con -10dB: más fragmentos, transiciones más estrictas
-         - Con -7dB: más continuidad, mejor detección de fricativas
-      ![Comparativa -10dB vs -7dB](img/comparativa_10db_vs_7db.png)
+    
 
 
 ### Antes de entregar la práctica
