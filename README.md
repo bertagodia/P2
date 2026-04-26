@@ -299,8 +299,11 @@ Ejercicios
     
     **Comparación: -10dB vs -7dB:**
       La siguiente gráfica muestra la diferencia entre el algoritmo original (-10dB) y el mejorado (-7dB):
-      * Con -10dB: más fragmentos, transiciones más estrictas
-      * Con -7dB: más continuidad, mejor detección de fricativas
+    * Con -10dB: más fragmentos, transiciones más estrictas
+    * Con -7dB: más continuidad, mejor detección de fricativas
+
+      El grafico comparativo es el siguiente:
+
       ![Comparativa -10dB vs -7dB](img/comparativa_10db_vs_7db.png)
       
       Luego de implementar la mejora nos queda el resultado final de:
