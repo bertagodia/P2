@@ -189,14 +189,14 @@ Ejercicios
     Lógica de Histéresis (Hangover): gracias a la histéresis, el detector automático puede mantener la etiqueta "VOZ" un poco más de tiempo después de que la señal baje un poco. Esto es muy útil porque evita cortar el final de las frases.  Utilizando el campo vad_data->counter, el sistema puede "acordarse" de que estaba en un estado de voz, por lo tanto, no cambia al estado de silencio inmediatamente. Este contador cubre unos 100-150 ms de seguridad, lo que suaviza las transiciones y da mucha más continuidad a las frases.
 
 
-    Optimización de parámetros: Para mirar el umbral indicado hemos hecho un barrido paramétrico, y hemos podido observar como con el umbral alpha = 14.4 el sistema alcanza su punto óptimo de compromiso entre Recall y Precision.
+    Optimización de parámetros: Para mirar el umbral indicado hemos hecho un barrido paramétrico, y hemos podido observar como con el umbral alpha = 13.9 el sistema alcanza su punto óptimo de compromiso entre Recall y Precision.
 
 - Inserte una gráfica en la que se vea con claridad la señal temporal, el etiquetado manual y la detección
   automática conseguida para el fichero grabado al efecto. 
 
-  Lo hemos hecho con un umbral de alpha de 14.4, ciclo de histéresi n=15 y tasa de cruces por zero de z=2000
+  Lo hemos hecho con un umbral de alpha de 13.9, silenci de 130ms y zcr detasa de cruces por zero de z=3200
 
-  ![Imatge de Comparació](img/14.4_15_2000.png)
+  ![Imatge de Comparació](img/labels_comparativa.png)
 
 - Explique, si existen. las discrepancias entre el etiquetado manual y la detección automática.
 
@@ -221,7 +221,7 @@ Ejercicios
 
     **Causas de las discrepancias:**
 
-    - **Histéresis**: El umbral de salida del silencio es muy bajo (15 tramas de baja potencia), creando segmentos cortos
+    - **Histéresis**: El umbral de salida del silencio es muy bajo (15 tramas de baja potencia), creando segmentos cortos, la calculamos a partir del minimo tiempo de silecio / tiempo de trama.
     - **Tramas de transición**: La detección automática captura cambios rápidos que el ojo humano no percibe
     - **Alpha0**: El parámetro de umbral influye en cuando se considera voz o silencio
 
@@ -230,7 +230,7 @@ Ejercicios
   continuación las tasas de sensibilidad (*recall*) y precisión para el conjunto de la base de datos (sólo
   el resumen).
 
-  Tras aplicar estas mejoras y usar el umbral optimizado de 14.4, los resultados obtenidos con el script de evaluación son:
+  Tras aplicar estas mejoras y usar el umbral optimizado de 13.9, los resultados obtenidos con el script de evaluación son:
 
   **************** Summary ****************
 
@@ -260,11 +260,11 @@ Ejercicios
   
   Hemos creado variables para: 
   * ZCR: tasa de cruces por cero
-  * Histéresi: el tamaño de la ventana del ciclo de histeresi
+  * Frametime: el tamaño de la ventana, que luego usaremos para calcular la histeresi
   * Silence Frame : como de grande es la trama de silencio
   * Voice Frame : como de grande es la trama de voz
 
-  ![Missatge ajuda](img/docopt_cap.png)
+  ![Missatge ajuda](img/docopt.png)
 
 
 ### Contribuciones adicionales y/o comentarios acerca de la práctica

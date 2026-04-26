@@ -21,7 +21,7 @@ typedef struct {
   float llindar_0;
   float umbral_zcr;
   int counter;
-  int hysteresis;
+  float frametime;
   float min_speech_ms;
   float min_silence_ms;
 } VAD_DATA;

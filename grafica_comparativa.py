@@ -12,9 +12,9 @@ import matplotlib.patches as mpatches
 # Configuracio
 fs = 16000
 wav_file = 'PAV_2121.wav'
-wav_canceled = 'PAV_2121_cancelado1.wav'
-manual_file = 'PAV_2121_manual.lab'
-auto_file = 'nouparametres.txt'
+wav_canceled = 'PAV_2121_cancelado2.wav'
+manual_file = 'PAV_2121.lab'
+auto_file = 'PAV_2121_auto.vad'
 
 # Llegir WAV
 with open(wav_file, 'rb') as f:
@@ -69,10 +69,10 @@ axes[1].set_ylabel('Amplitud')
 # 3. Etiquetat manual
 def plot_labels_manual(ax, labels, color):
     for start, end, label in labels:
-        if label == 'SILENCIO':
+        if label == 'S':
             ax.axvspan(start, end, alpha=0.3, color='gray')
             ax.text((start + end) / 2, 0.8, 'S', ha='center', va='center', fontsize=10, fontweight='bold')
-        if label == 'VOZ':
+        if label == 'V':
             ax.axvspan(start, end, alpha=0.5, color=color, hatch='///')
             ax.text((start + end) / 2, 0.8, 'V', ha='center', va='center', fontsize=10, fontweight='bold')
     ax.set_ylim(-0.1, 1.1)

@@ -59,12 +59,10 @@ VAD_DATA * vad_open(float rate) {
   VAD_DATA *vad_data = malloc(sizeof(VAD_DATA));
   vad_data->state = ST_INIT;
   vad_data->sampling_rate = rate;
-  vad_data->frame_length = rate * FRAME_TIME * 1e-3;
-  /*vad_data->counter = 0;*/
-  vad_data->hysteresis = 15;
-  vad_data->umbral_zcr = 3300.f;
-  vad_data->min_speech_ms = 50.0f;
-  vad_data->min_silence_ms = 100.0f;
+  vad_data->frametime = 10.0F;
+  vad_data->frame_length = rate * vad_data->frametime * 1e-3;
+  vad_data->counter = 0;
+  // La resta s'assigna des de main_vad.c (docopt)
   return vad_data;
 }
 
@@ -120,7 +118,7 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
     if (f.p < umbral_potencia) {
       vad_data->counter++;
       // USAMOS MIN_SILENCE (Histéresis): ¿La pausa es lo suficientemente larga para rendirse?
-      if (vad_data->counter > (vad_data->min_silence_ms / FRAME_TIME)) {
+      if (vad_data->counter > (vad_data->min_silence_ms / vad_data->frametime)) {
         vad_data->state = ST_SILENCE;
         vad_data->counter = 0;
       }

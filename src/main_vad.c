@@ -37,7 +37,6 @@ int main(int argc, char *argv[]) {
   
   float alpha0 = atof(args.alpha0);
   float zcr = atof(args.zcr);
-  int hysteresis = atoi(args.hysteresis);
   float min_speech = atof(args.min_speech);
   float min_silence = atof(args.min_silence);
 
@@ -77,27 +76,13 @@ int main(int argc, char *argv[]) {
   }
 
   /* Initialize VAD */
-  vad_data = vad_open(sf_info.samplerate);
+vad_data = vad_open(sf_info.samplerate);
   
-  //vad_data->llindar_0 = alpha0;
-  if (alpha0 != 0) {
-    vad_data->llindar_0 = alpha0;
-} else {
-    vad_data->llindar_0 = 13.9f; // Valor de rescate por si falla el script
-}
-  //vad_data->umbral_zcr = zcr;
-  if (zcr <= 0.0f) {
-    vad_data->umbral_zcr = 3200.0f; 
-  } else {
-    vad_data->umbral_zcr = zcr;
-  }
-  vad_data->hysteresis = hysteresis;
+  vad_data->llindar_0 = alpha0;
+  vad_data->umbral_zcr = zcr;
+  vad_data->frametime = atof(args.frametime);
   vad_data->min_speech_ms = min_speech;
- if (min_silence > 0) {
-      vad_data->min_silence_ms = min_silence;
-  } else {
-      vad_data->min_silence_ms = 130.0f; 
-  }
+  vad_data->min_silence_ms = min_silence;
 
   /* Allocate memory for buffers */
   frame_size   = vad_frame_size(vad_data);

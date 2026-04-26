@@ -17,13 +17,13 @@ typedef struct {
     int version;
     /* options with arguments */
     char *alpha0;
-    char *zcr;
-    char *hysteresis;
-    char *min_speech;
-    char *min_silence;
+    char *frametime;
     char *input_wav;
+    char *min_silence;
+    char *min_speech;
     char *output_vad;
     char *output_wav;
+    char *zcr;
     /* special */
     const char *usage_pattern;
     const char *help_message;
@@ -38,16 +38,16 @@ const char help_message[] =
 "   vad --version\n"
 "\n"
 "Options:\n"
-"   -i FILE, --input-wav=FILE    WAVE file for voice activity detection\n"
-"   -o FILE, --output-vad=FILE   Label file with the result of VAD\n"
-"   -w FILE, --output-wav=FILE    WAVE file with silences cleared\n"
-"   -0 FLOAT, --alpha0=FLOAT      Increment per calcular llindar0 (dB) [default: 14.4]\n"
-"   -z FLOAT, --zcr=FLOAT         Llindar ZCR [default: 2000]\n"
-"   -n INT, --hysteresis=INT      Trames d'histeresi [default: 15]\n"
-"   -m FLOAT, --min-speech=FLOAT  Durada minima veu (ms) [default: 50]\n"
-"   -s FLOAT, --min-silence=FLOAT Durada minima silenci (ms) [default: 100]\n"
-"   -v, --verbose                 Show debug information\n"
-"   -h, --help                   Show this screen\n"
+"   -i FILE --input-wav FILE         WAVE file for voice activity detection\n"
+"   -o FILE --output-vad FILE        Label file with the result of VAD\n"
+"   -w FILE --output-wav FILE       WAVE file with silences cleared\n"
+"   -0 FLOAT --alpha0 FLOAT         Increment per calcular llindar0 (dB) [default: 13.9]\n"
+"   -z FLOAT --zcr FLOAT            Llindar ZCR [default: 3200]\n"
+"   -f INT --frametime INT          Temps de Trames    [default: 10]\n"
+"   -m FLOAT --min-speech FLOAT    Durada minima veu (ms) [default: 50]\n"
+"   -s FLOAT --min-silence FLOAT   Durada minima silenci (ms) [default: 130]\n"
+"   -v --verbose                  Show debug information\n"
+"   -h --help                   Show this screen\n"
 "   --version                    Show the version of the project\n"
 "";
 
@@ -283,9 +283,18 @@ int elems_to_args(Elements *elements, DocoptArgs *args, bool help,
         } else if (!strcmp(option->olong, "--alpha0")) {
             if (option->argument)
                 args->alpha0 = option->argument;
+        } else if (!strcmp(option->olong, "--frametime")) {
+            if (option->argument)
+                args->frametime = option->argument;
         } else if (!strcmp(option->olong, "--input-wav")) {
             if (option->argument)
                 args->input_wav = option->argument;
+        } else if (!strcmp(option->olong, "--min-silence")) {
+            if (option->argument)
+                args->min_silence = option->argument;
+        } else if (!strcmp(option->olong, "--min-speech")) {
+            if (option->argument)
+                args->min_speech = option->argument;
         } else if (!strcmp(option->olong, "--output-vad")) {
             if (option->argument)
                 args->output_vad = option->argument;
@@ -295,15 +304,6 @@ int elems_to_args(Elements *elements, DocoptArgs *args, bool help,
         } else if (!strcmp(option->olong, "--zcr")) {
             if (option->argument)
                 args->zcr = option->argument;
-        } else if (!strcmp(option->olong, "--hysteresis")) {
-            if (option->argument)
-                args->hysteresis = option->argument;
-        } else if (!strcmp(option->olong, "--min-speech")) {
-            if (option->argument)
-                args->min_speech = option->argument;
-        } else if (!strcmp(option->olong, "--min-silence")) {
-            if (option->argument)
-                args->min_silence = option->argument;
         }
     }
     /* commands */
@@ -324,7 +324,8 @@ int elems_to_args(Elements *elements, DocoptArgs *args, bool help,
 
 DocoptArgs docopt(int argc, char *argv[], bool help, const char *version) {
     DocoptArgs args = {
-        0, 0, 0, (char*) "14.4", (char*) "2000", (char*) "15", (char*) "50", (char*) "100", NULL, NULL, NULL,
+        0, 0, 0, (char*) "13.9", (char*) "10", NULL, (char*) "130", (char*)
+        "50", NULL, NULL, (char*) "3200",
         usage_pattern, help_message
     };
     Tokens ts;
@@ -337,13 +338,13 @@ DocoptArgs docopt(int argc, char *argv[], bool help, const char *version) {
         {"-v", "--verbose", 0, 0, NULL},
         {NULL, "--version", 0, 0, NULL},
         {"-0", "--alpha0", 1, 0, NULL},
-        {"-z", "--zcr", 1, 0, NULL},
-        {"-n", "--hysteresis", 1, 0, NULL},
-        {"-m", "--min-speech", 1, 0, NULL},
-        {"-s", "--min-silence", 1, 0, NULL},
+        {"-f", "--frametime", 1, 0, NULL},
         {"-i", "--input-wav", 1, 0, NULL},
+        {"-s", "--min-silence", 1, 0, NULL},
+        {"-m", "--min-speech", 1, 0, NULL},
         {"-o", "--output-vad", 1, 0, NULL},
-        {"-w", "--output-wav", 1, 0, NULL}
+        {"-w", "--output-wav", 1, 0, NULL},
+        {"-z", "--zcr", 1, 0, NULL}
     };
     Elements elements = {0, 0, 11, commands, arguments, options};
 
